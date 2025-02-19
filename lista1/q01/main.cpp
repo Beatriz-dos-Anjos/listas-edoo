@@ -24,7 +24,7 @@ public:
 // Implementação dos métodos
 
 Stack::Stack() {
-    top = nullptr; // A pilha começa vazia
+    top = nullptr; // A pilha começa vazia, sendo o topo uum ponteiro tipo NÓ (privado )
 }
 
 Stack::~Stack() {
@@ -60,46 +60,49 @@ bool Stack::isEmpty() {
     return top == nullptr;
 }
 
-// Função principal
+// Função principal !!!!
 int equalStacks(int h1, int h2, int h3) {
-    int size1 = 0, size2 = 0, size3 = 0, value = 0;
-    vector<int> tempStack;  // Vetor para armazenar os valores antes de empilhar
+    int size1 = 0;
+    int  size2 = 0;
+    int size3 = 0;
+    int value = 0;
+    vector<int> StackRepresentation;  // Vetor para armazenar os valores antes de empilhar
 
     // Criando a Stack 1
     Stack s1;
     for (int i = 0; i < h1; i++) {
         cin >> value;
-        tempStack.push_back(value);
+        StackRepresentation.push_back(value);
     }
-    for (int i = h1 - 1; i >= 0; i--) { // Empilha na ordem correta
-        s1.push(tempStack[i]);
-        size1 += tempStack[i];
+    for (int i = h1 - 1; i >= 0; i--) { // Reverte a ordem de leitura dos valores para empilhar corretamente ( )
+        s1.push(StackRepresentation[i]);
+        size1 += StackRepresentation[i];
     }
-    tempStack.clear(); // Limpa o vetor para reutilizar
+    StackRepresentation.clear(); // Limpa o vetor para reutilizar
 
     // Criando a Stack 2
     Stack s2;
     for (int i = 0; i < h2; i++) {
         cin >> value;
-        tempStack.push_back(value);
+        StackRepresentation.push_back(value);
     }
     for (int i = h2 - 1; i >= 0; i--) { // Empilha na ordem correta
-        s2.push(tempStack[i]);
-        size2 += tempStack[i];
+        s2.push(StackRepresentation[i]);
+        size2 += StackRepresentation[i];
     }
-    tempStack.clear(); // Limpa o vetor para reutilizar
+    StackRepresentation.clear(); // Limpa o vetor para reutilizar
 
     // Criando a Stack 3
     Stack s3;
     for (int i = 0; i < h3; i++) {
         cin >> value;
-        tempStack.push_back(value);
+        StackRepresentation.push_back(value);
     }
     for (int i = h3 - 1; i >= 0; i--) { // Empilha na ordem correta
-        s3.push(tempStack[i]);
-        size3 += tempStack[i];
+        s3.push(StackRepresentation[i]);
+        size3 += StackRepresentation[i];
     }
-    tempStack.clear(); // Limpa o vetor
+    StackRepresentation.clear(); // Limpa o vetor
 
     bool isEqual = false; // Variável que guarda se as pilhas são iguais
     while (!isEqual) {
