@@ -1,80 +1,100 @@
-#include "iostream"
-#include "string"
+#include <iostream>
+#include <string>
+
 using namespace std;
 
 struct Node
 {
-    char value;           // o input do usuario sera um char
-    Node *next = nullptr; // ponteiros para o proximo node e o anterior sao nulos, pois o primeiro nó criado nao tem antecessor e o ultimo nao tem sucessor
+    char value;
+    Node *next = nullptr;
     Node *previous = nullptr;
 };
 
-Node *head = nullptr; // ponteiro para o primeiro node da lista
-Node *tail = nullptr; // ponteiro para o ultimo node da lista
+Node *head = nullptr;
+Node *tail = nullptr;
 
-// funcao ao encontrar [, inserindo elemento no início da lista
-void insertNodeInit(char value)
-{
-    Node *newValue = new Node; // alocacao dinamica de memoria para um novo node
-    newValue->value = value;
-    if (head == nullptr)
-    {
-        head = newValue;
-        tail = newValue;
-    }
-    else
-    {
-        newValue->next = head; // o proximo node do novo node eh o antigo primeiro node
-        head->previous = newValue;
-        head = newValue;
-    }
-}
-
-// funcao ao encontrar ], inserir no final da lista
-void insertNodeEnd(char value)
+void insertNormalNode(char value, Node *&insertPos)
 {
     Node *newValue = new Node;
     newValue->value = value;
-    if (head == nullptr)
+
+    if (head == nullptr) // Lista vazia, cria o primeiro nó
     {
         head = newValue;
-        tail = newValue; // ja que so tem um elemento, ele eh o primeiro e o ultimo
+        tail = newValue;
+        insertPos = nullptr; // Depois da primeira inserção, inserir no final por padrão
     }
-    else
+    else if (insertPos == nullptr) // Inserção no final
     {
         newValue->previous = tail;
         tail->next = newValue;
         tail = newValue;
     }
+    else // Inserção no início ou no meio
+    {
+        newValue->next = insertPos;
+        newValue->previous = insertPos->previous;
+
+        if (insertPos->previous != nullptr)
+        {
+            insertPos->previous->next = newValue;
+        }
+        else
+        {
+            head = newValue; // Atualiza `head` corretamente
+        }
+
+        insertPos->previous = newValue;
+    }
 }
 
-
-//funcao para saber a quantidade de caracteres dentro da entrada string
-int getLength(string entry){
-    int length = 0;
-    for ( int length; entry[length] != '\0'; length++){
-        length++;
+void liberarMemoria()
+{
+    Node *temp = head;
+    while (temp != nullptr)
+    {
+        Node *next = temp->next;
+        delete temp;
+        temp = next;
     }
-    return length;
 }
 
 int main()
 {
-    std::string entry;
-    cin >> entry;
-    int lengthEntry = getLength(entry);
-    for (int i = 0; i < lengthEntry; i++)
-    {
-        if (entry[i] == '[')
-        {
-            insertNodeInit(entry[i]);
-        }
-        else if (entry[i] == ']')
-        {
-            insertNodeEnd(entry[i]);
-        }
-    }
+    string entry;
 
+    while (cin >> entry)
+    {
+        head = nullptr;
+        tail = nullptr;
+        Node *insertPos = nullptr; // Posição onde os caracteres serão inseridos
+
+        for (char ch : entry)
+        {
+            if (ch == '[')
+            {
+                insertPos = head; // Sempre insere no início quando `[`
+            }
+            else if (ch == ']')
+            {
+                insertPos = nullptr; // Muda a inserção para o final
+            }
+            else
+            {
+                insertNormalNode(ch, insertPos);
+            }
+        }
+
+        // Impressão correta mantendo a ordem original dos caracteres
+        Node *tempPrint = head;
+        while (tempPrint != nullptr)
+        {
+            cout << tempPrint->value;
+            tempPrint = tempPrint->next;
+        }
+        cout << endl;
+
+    }
 
     return 0;
 }
