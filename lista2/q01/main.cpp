@@ -13,7 +13,7 @@ public:
     ~HashTable();
     void insert(string key_string);
     void remove(string key_String);
-    void find(int key);
+    int find(string key_string);
 };
 
 HashTable::HashTable(int maxSize, string *hashTableStructure) // construtor que inicializa o tamanho máximo da tabela, sendo esse 101
@@ -77,5 +77,28 @@ void HashTable::remove(string key_string)
         }
         position = (position + j * j + 23 * j) % 101;
         j++;
+    }
+}
+
+int HashTable::find(string key_string)
+{
+    int position = HashFunction(key_string);
+    if (hashTableStructure[position] == key_string)
+    {
+        return position;
+    }
+    else
+    {
+        int j = 1;
+        while ((hashTableStructure[position] != "" && hashTableStructure[position] != "DELETED") && j < 20)
+        {
+            if (hashTableStructure[position] == key_string)
+            {
+                return position;
+            }
+            position = (position + j * j + 23 * j) % 101;
+            j++;
+        }
+        return -1;
     }
 }
